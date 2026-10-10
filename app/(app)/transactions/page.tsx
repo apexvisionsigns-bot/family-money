@@ -66,7 +66,7 @@ export default function Transactions() {
 
   async function save() {
     setErr('')
-    if (!accountId) return setErr('Add a bank account first (Accounts page)')
+    if (!accountId) return setErr('Add a bank account first on the Accounts page')
     if (!amount || Number(amount) <= 0) return setErr('Enter an amount')
     setSaving(true)
     const { error } = await supabase.from('transactions').insert({
@@ -95,44 +95,42 @@ export default function Transactions() {
   const catOptions = cats.filter((c) => c.kind === kind)
 
   return (
-    <div className="space-y-4">
-      <h1 className="text-lg font-semibold">Money in / out</h1>
+    <div className="space-y-6">
+      <h1 className="text-2xl font-semibold tracking-tight">Money in and out</h1>
 
       {canEdit && (
-        <div className="bg-white border rounded-xl p-3 space-y-2">
+        <div className="panel p-4 space-y-3">
           <div className="grid grid-cols-2 gap-2">
             <button
               onClick={() => {
                 setKind('expense')
                 setCategoryId('')
               }}
-              className={'rounded p-2 border ' + (kind === 'expense' ? 'bg-red-600 text-white' : '')}
+              className="seg"
+              style={kind === 'expense' ? { background: 'rgba(255,123,139,.14)', borderColor: 'var(--color-rose)', color: 'var(--color-rose)' } : undefined}
             >
-              Expense
+              Money out
             </button>
             <button
               onClick={() => {
                 setKind('income')
                 setCategoryId('')
               }}
-              className={'rounded p-2 border ' + (kind === 'income' ? 'bg-green-600 text-white' : '')}
+              className="seg"
+              style={kind === 'income' ? { background: 'rgba(82,211,168,.14)', borderColor: 'var(--color-mint)', color: 'var(--color-mint)' } : undefined}
             >
-              Income
+              Money in
             </button>
           </div>
           <input
-            className="w-full border rounded p-2"
+            className="field num"
             placeholder="Amount (Rs.)"
             type="number"
             inputMode="decimal"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
           />
-          <select
-            className="w-full border rounded p-2"
-            value={accountId}
-            onChange={(e) => setAccountId(e.target.value)}
-          >
+          <select className="field" value={accountId} onChange={(e) => setAccountId(e.target.value)}>
             {accs.length === 0 && <option value="">No accounts</option>}
             {accs.map((a) => (
               <option key={a.id} value={a.id}>
@@ -140,81 +138,66 @@ export default function Transactions() {
               </option>
             ))}
           </select>
-          <select
-            className="w-full border rounded p-2"
-            value={categoryId}
-            onChange={(e) => setCategoryId(e.target.value)}
-          >
-            <option value="">Category (what was it for?)</option>
+          <select className="field" value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
+            <option value="">What was it for?</option>
             {catOptions.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.name}
               </option>
             ))}
           </select>
+          <input className="field" type="date" value={date} onChange={(e) => setDate(e.target.value)} />
           <input
-            className="w-full border rounded p-2"
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-          />
-          <input
-            className="w-full border rounded p-2"
+            className="field"
             placeholder="Note (optional)"
             value={note}
             onChange={(e) => setNote(e.target.value)}
           />
-          {err && <p className="text-red-600 text-sm">{err}</p>}
-          <button
-            onClick={save}
-            disabled={saving}
-            className="w-full bg-black text-white rounded p-2 disabled:opacity-50"
-          >
-            {saving ? 'Saving...' : 'Save'}
+          {err && <p className="text-rose text-sm">{err}</p>}
+          <button onClick={save} disabled={saving} className="btn w-full">
+            {saving ? 'Saving...' : 'Save entry'}
           </button>
         </div>
       )}
 
-      <div className="flex items-center justify-between">
-        <input
-          type="month"
-          className="border rounded p-2"
-          value={month}
-          onChange={(e) => setMonth(e.target.value)}
-        />
-        <div className="text-right text-sm">
-          <p className="text-green-700">In: {money(inc)}</p>
-          <p className="text-red-700">Out: {money(exp)}</p>
+      <div className="flex items-center justify-between gap-3">
+        <input type="month" className="field !w-auto" value={month} onChange={(e) => setMonth(e.target.value)} />
+        <div className="text-right text-sm num">
+          <p className="text-mint">+{money(inc)}</p>
+          <p className="text-rose">-{money(exp)}</p>
         </div>
       </div>
 
-      <div className="space-y-2">
-        {txs.length === 0 && <p className="text-gray-500 text-sm">Nothing this month.</p>}
-        {txs.map((t) => (
-          <div key={t.id} className="flex justify-between bg-white border rounded-lg p-3">
-            <div>
-              <p className="text-sm">
-                {t.categories?.name ?? 'Uncategorised'}
-                {t.note ? ` - ${t.note}` : ''}
-              </p>
-              <p className="text-xs text-gray-500">
-                {t.tx_date} | {t.accounts?.name}
-              </p>
+      {txs.length === 0 ? (
+        <p className="text-mute text-sm">Nothing recorded this month.</p>
+      ) : (
+        <div className="panel rows">
+          {txs.map((t) => (
+            <div key={t.id} className="flex justify-between gap-3 p-4">
+              <div className="min-w-0">
+                <p className="truncate">
+                  {t.categories?.name ?? 'Uncategorised'}
+                  {t.note ? <span className="text-mute"> - {t.note}</span> : null}
+                </p>
+                <p className="text-xs text-mute num">
+                  {t.tx_date} | {t.accounts?.name}
+                </p>
+              </div>
+              <div className="text-right shrink-0">
+                <p className={'num font-medium ' + (t.kind === 'income' ? 'text-mint' : 'text-rose')}>
+                  {t.kind === 'income' ? '+' : '-'}
+                  {money(t.amount)}
+                </p>
+                {isAdmin && (
+                  <button onClick={() => remove(t.id)} className="link-danger">
+                    delete
+                  </button>
+                )}
+              </div>
             </div>
-            <div className="text-right">
-              <p className={t.kind === 'income' ? 'text-green-700' : 'text-red-700'}>
-                {t.kind === 'income' ? '+' : '-'}
-                {money(t.amount)}
-              </p>
-              {isAdmin && (
-                <button onClick={() => remove(t.id)} className="text-xs text-red-600 underline">
-                  delete
-                </button>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }

@@ -52,6 +52,6 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     }
   }, [router])
 
-  if (!ctx) return <p className="p-6">Loading...</p>
+  if (!ctx) return <p className="p-6 text-mute">Loading...</p>
   return <AuthCtx.Provider value={ctx}>{children}</AuthCtx.Provider>
 }

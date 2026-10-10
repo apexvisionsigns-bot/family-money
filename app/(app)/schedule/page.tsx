@@ -124,81 +124,97 @@ export default function Schedule() {
   }
 
   return (
-    <div className="space-y-4">
-      <h1 className="text-lg font-semibold">Schedule</h1>
+    <div className="space-y-6">
+      <h1 className="text-2xl font-semibold tracking-tight">Schedule</h1>
 
-      <div className="bg-white border rounded-xl p-3 space-y-2">
-        <p className="text-sm font-medium">Add event</p>
+      <div className="panel p-4 space-y-3">
+        <p className="font-medium">Add an event</p>
         <input
-          className="w-full border rounded p-2"
-          placeholder="What? (e.g. Work, Class, Hospital)"
+          className="field"
+          placeholder="What is it? e.g. Work, Class, Hospital"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-        <select className="w-full border rounded p-2" value={owner} onChange={(e) => setOwner(e.target.value)}>
+        <select className="field" value={owner} onChange={(e) => setOwner(e.target.value)}>
           {people.map((p) => (
             <option key={p.id} value={p.id}>
               For: {p.full_name}
             </option>
           ))}
         </select>
-        <input type="date" className="w-full border rounded p-2" value={date} onChange={(e) => setDate(e.target.value)} />
+        <input type="date" className="field" value={date} onChange={(e) => setDate(e.target.value)} />
         <div className="grid grid-cols-2 gap-2">
-          <input type="time" className="border rounded p-2" value={start} onChange={(e) => setStart(e.target.value)} />
-          <input type="time" className="border rounded p-2" value={end} onChange={(e) => setEnd(e.target.value)} />
+          <input type="time" className="field" value={start} onChange={(e) => setStart(e.target.value)} />
+          <input type="time" className="field" value={end} onChange={(e) => setEnd(e.target.value)} />
         </div>
-        {err && <p className="text-red-600 text-sm">{err}</p>}
-        <button onClick={add} className="bg-black text-white rounded px-4 py-2">
-          Add
+        {err && <p className="text-rose text-sm">{err}</p>}
+        <button onClick={add} className="btn">
+          Add event
         </button>
       </div>
 
       <div className="flex items-center justify-between">
-        <button onClick={() => shiftWeek(-1)} className="border rounded px-3 py-1 bg-white">
+        <button onClick={() => shiftWeek(-1)} className="btn-ghost" aria-label="Previous week">
           &larr;
         </button>
-        <p className="text-sm font-medium">
+        <p className="font-medium">
           Week of {weekStart.toLocaleDateString([], { month: 'short', day: 'numeric' })}
         </p>
-        <button onClick={() => shiftWeek(1)} className="border rounded px-3 py-1 bg-white">
+        <button onClick={() => shiftWeek(1)} className="btn-ghost" aria-label="Next week">
           &rarr;
         </button>
       </div>
 
-      <select className="w-full border rounded p-2 bg-white" value={freeFor} onChange={(e) => setFreeFor(e.target.value)}>
-        <option value="all">Free time: all of us together</option>
+      <select className="field" value={freeFor} onChange={(e) => setFreeFor(e.target.value)}>
+        <option value="all">Free time for all of us together</option>
         {people.map((p) => (
           <option key={p.id} value={p.id}>
-            Free time: {p.full_name} only
+            Free time for {p.full_name} only
           </option>
         ))}
       </select>
 
       <div className="space-y-3">
-        {days.map(({ d, dayEvents, free }) => (
-          <div key={d.toISOString()} className="bg-white border rounded-xl p-3 space-y-2">
-            <p className="font-medium text-sm">
-              {d.toLocaleDateString([], { weekday: 'long', month: 'short', day: 'numeric' })}
-            </p>
-            {dayEvents.map((e) => (
-              <div key={e.id} className="flex justify-between bg-gray-100 rounded p-2 text-sm">
-                <span>
-                  {fmtTime(new Date(e.starts_at))} - {fmtTime(new Date(e.ends_at))} | {e.title}
-                  <span className="text-gray-500"> ({nameOf(e.owner)})</span>
-                </span>
-                <button onClick={() => remove(e.id)} className="text-red-600 text-xs underline ml-2">
-                  x
-                </button>
-              </div>
-            ))}
-            {free.length === 0 && <p className="text-xs text-gray-500">No free slot of 1h+ ({DAY_START}:00-{DAY_END}:00)</p>}
-            {free.map((f, i) => (
-              <div key={i} className="bg-green-100 text-green-800 rounded p-2 text-sm">
-                Free: {fmtTime(f.s)} - {fmtTime(f.e)}
-              </div>
-            ))}
-          </div>
-        ))}
+        {days.map(({ d, dayEvents, free }) => {
+          const isToday = d.toDateString() === new Date().toDateString()
+          return (
+            <div key={d.toISOString()} className="panel p-4 space-y-2">
+              <p className="font-medium flex items-center gap-2">
+                {isToday && <span className="w-2 h-2 rounded-full bg-gold" />}
+                {d.toLocaleDateString([], { weekday: 'long', month: 'short', day: 'numeric' })}
+              </p>
+              {dayEvents.map((e) => (
+                <div key={e.id} className="flex justify-between gap-2 bg-raised rounded-xl p-3 text-sm">
+                  <span>
+                    <span className="num text-mute">
+                      {fmtTime(new Date(e.starts_at))} - {fmtTime(new Date(e.ends_at))}
+                    </span>
+                    <br />
+                    {e.title}
+                    <span className="text-gold"> {nameOf(e.owner)}</span>
+                  </span>
+                  <button onClick={() => remove(e.id)} className="link-danger self-start">
+                    remove
+                  </button>
+                </div>
+              ))}
+              {free.length === 0 && (
+                <p className="text-xs text-mute">
+                  No free slot of an hour or more between {DAY_START}:00 and {DAY_END}:00
+                </p>
+              )}
+              {free.map((f, i) => (
+                <div
+                  key={i}
+                  className="rounded-xl p-3 text-sm num text-mint"
+                  style={{ background: 'rgba(82,211,168,.12)', border: '1px solid rgba(82,211,168,.35)' }}
+                >
+                  Free {fmtTime(f.s)} - {fmtTime(f.e)}
+                </div>
+              ))}
+            </div>
+          )
+        })}
       </div>
     </div>
   )

@@ -32,41 +32,59 @@ export default function Dashboard() {
     })()
   }, [])
 
-  if (loading) return <p>Loading...</p>
+  if (loading) return <p className="text-mute">Loading...</p>
   const total = bals.reduce((s, b) => s + Number(b.balance), 0)
+  const flow = inc + exp
+  const incPct = flow ? (inc / flow) * 100 : 50
 
   return (
-    <div className="space-y-4">
-      <div className="bg-black text-white rounded-xl p-4">
-        <p className="text-sm opacity-70">Total balance</p>
-        <p className="text-3xl font-semibold">{money(total)}</p>
-      </div>
+    <div className="space-y-8">
+      <section className="pt-4">
+        <p className="text-mute text-sm">Total balance</p>
+        <p className="num text-[2.6rem] leading-tight font-semibold tracking-tight">{money(total)}</p>
 
-      <div className="grid grid-cols-2 gap-3">
-        <div className="bg-white border rounded-xl p-3">
-          <p className="text-xs text-gray-500">Income this month</p>
-          <p className="text-lg font-semibold text-green-700">{money(inc)}</p>
-        </div>
-        <div className="bg-white border rounded-xl p-3">
-          <p className="text-xs text-gray-500">Spent this month</p>
-          <p className="text-lg font-semibold text-red-700">{money(exp)}</p>
-        </div>
-      </div>
-
-      <div className="space-y-2">
-        <h2 className="font-medium">Accounts</h2>
-        {bals.length === 0 && (
-          <p className="text-gray-500 text-sm">
-            No accounts yet. <Link className="underline" href="/accounts">Add your first account</Link>
-          </p>
-        )}
-        {bals.map((b) => (
-          <div key={b.id} className="flex justify-between bg-white border rounded-lg p-3">
-            <span>{b.name}</span>
-            <span>{money(b.balance)}</span>
+        <div className="mt-5">
+          <div className="flex h-2 rounded-full overflow-hidden bg-raised">
+            {flow > 0 && (
+              <>
+                <div className="bg-mint" style={{ width: `${incPct}%` }} />
+                <div className="bg-rose" style={{ width: `${100 - incPct}%` }} />
+              </>
+            )}
           </div>
-        ))}
-      </div>
+          <div className="flex justify-between mt-3 text-sm">
+            <div>
+              <p className="text-mute">In this month</p>
+              <p className="num text-mint font-medium">{money(inc)}</p>
+            </div>
+            <div className="text-right">
+              <p className="text-mute">Out this month</p>
+              <p className="num text-rose font-medium">{money(exp)}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 className="font-medium mb-3">Accounts</h2>
+        {bals.length === 0 ? (
+          <div className="panel p-4 text-sm text-mute">
+            Nothing here yet.{' '}
+            <Link className="text-gold underline underline-offset-4" href="/accounts">
+              Add your first bank account
+            </Link>
+          </div>
+        ) : (
+          <div className="panel rows">
+            {bals.map((b) => (
+              <div key={b.id} className="flex justify-between p-4">
+                <span>{b.name}</span>
+                <span className="num font-medium">{money(b.balance)}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
     </div>
   )
 }

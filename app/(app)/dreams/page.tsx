@@ -98,28 +98,28 @@ export default function Dreams() {
   }
 
   return (
-    <div className="space-y-4">
-      <h1 className="text-lg font-semibold">Dreams</h1>
+    <div className="space-y-6">
+      <h1 className="text-2xl font-semibold tracking-tight">Dreams</h1>
 
-      <div className="bg-white border rounded-xl p-3 space-y-2">
-        <p className="text-sm font-medium">Add a dream</p>
+      <div className="panel p-4 space-y-3">
+        <p className="font-medium">Add a dream</p>
         <input
-          className="w-full border rounded p-2"
-          placeholder="Dream (e.g. Own a house)"
+          className="field"
+          placeholder="Your dream, e.g. Own a house"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
         <div className="grid grid-cols-2 gap-2">
           <input
-            className="border rounded p-2"
-            placeholder="Achieve by age"
+            className="field"
+            placeholder="By age"
             type="number"
             inputMode="numeric"
             value={age}
             onChange={(e) => setAge(e.target.value)}
           />
           <input
-            className="border rounded p-2"
+            className="field"
             placeholder="Cost (Rs.)"
             type="number"
             inputMode="decimal"
@@ -128,55 +128,56 @@ export default function Dreams() {
           />
         </div>
         <input
-          className="w-full border rounded p-2"
+          className="field"
           placeholder="Note (optional)"
           value={note}
           onChange={(e) => setNote(e.target.value)}
         />
-        <input type="file" accept="image/*" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
-        {err && <p className="text-red-600 text-sm">{err}</p>}
-        <button
-          onClick={add}
-          disabled={saving}
-          className="bg-black text-white rounded px-4 py-2 disabled:opacity-50"
-        >
+        <input
+          type="file"
+          accept="image/*"
+          className="block w-full text-sm text-mute file:mr-3 file:rounded-lg file:border file:border-line file:bg-raised file:px-3 file:py-2 file:text-ink"
+          onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+        />
+        {err && <p className="text-rose text-sm">{err}</p>}
+        <button onClick={add} disabled={saving} className="btn">
           {saving ? 'Saving...' : 'Add dream'}
         </button>
       </div>
 
       <div className="space-y-3">
-        {dreams.length === 0 && <p className="text-gray-500 text-sm">No dreams yet. Add the first one!</p>}
+        {dreams.length === 0 && <p className="text-mute text-sm">No dreams yet. Add the first one above.</p>}
         {dreams.map((d) => {
           const pct = d.target_amount ? Math.min(100, (Number(d.saved_amount) / Number(d.target_amount)) * 100) : 0
           const img = d.photo_path ? urls[d.photo_path] : null
           return (
-            <div key={d.id} className="bg-white border rounded-xl overflow-hidden">
+            <div key={d.id} className="panel overflow-hidden">
               {img && (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={img} alt={d.title} className="w-full h-48 object-cover" />
+                <img src={img} alt={d.title} className="w-full h-52 object-cover" />
               )}
-              <div className="p-3 space-y-2">
+              <div className="p-4 space-y-3">
                 <div className="flex justify-between">
-                  <p className="font-medium">{d.title}</p>
-                  {d.target_age && <p className="text-sm text-gray-500">By age {d.target_age}</p>}
+                  <p className="text-lg font-medium leading-snug">{d.title}</p>
+                  {d.target_age && <p className="text-sm text-gold shrink-0 ml-3">By age {d.target_age}</p>}
                 </div>
-                {d.note && <p className="text-sm text-gray-600">{d.note}</p>}
+                {d.note && <p className="text-sm text-mute">{d.note}</p>}
                 {d.target_amount ? (
                   <>
-                    <div className="h-2 bg-gray-200 rounded">
-                      <div className="h-2 bg-green-600 rounded" style={{ width: `${pct}%` }} />
+                    <div className="h-2 bg-raised rounded-full overflow-hidden">
+                      <div className="h-2 bg-gold rounded-full" style={{ width: `${pct}%` }} />
                     </div>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-mute num">
                       {money(d.saved_amount)} of {money(d.target_amount)} ({pct.toFixed(0)}%)
                     </p>
                   </>
                 ) : null}
                 <div className="flex gap-4 text-sm">
-                  <button onClick={() => addSaving(d)} className="underline">
-                    + Add savings
+                  <button onClick={() => addSaving(d)} className="text-gold underline underline-offset-4">
+                    Add savings
                   </button>
                   {isAdmin && (
-                    <button onClick={() => remove(d)} className="underline text-red-600">
+                    <button onClick={() => remove(d)} className="link-danger">
                       delete
                     </button>
                   )}

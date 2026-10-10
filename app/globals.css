@@ -1,26 +1,100 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme static {
+  --color-bg: #0c1220;
+  --color-surface: #141c2e;
+  --color-raised: #1b2640;
+  --color-line: #263250;
+  --color-ink: #e9edf6;
+  --color-mute: #8693b2;
+  --color-gold: #f0b94a;
+  --color-mint: #52d3a8;
+  --color-rose: #ff7b8b;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  color-scheme: dark;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: 'Avenir Next', 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* a grouped list: rows divided by thin lines inside one surface */
+.panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 18px;
+}
+.rows > * + * {
+  border-top: 1px solid var(--color-line);
+}
+
+.field {
+  width: 100%;
+  background: var(--color-bg);
+  border: 1px solid var(--color-line);
+  border-radius: 12px;
+  padding: 0.75rem 0.85rem;
+  color: var(--color-ink);
+  font-size: 16px;
+  min-width: 0;
+}
+.field::placeholder {
+  color: var(--color-mute);
+}
+.field:focus {
+  outline: none;
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 3px rgba(240, 185, 74, 0.18);
+}
+
+.btn {
+  background: var(--color-gold);
+  color: #1d1604;
+  font-weight: 600;
+  border-radius: 12px;
+  padding: 0.75rem 1.2rem;
+  transition: filter 0.15s;
+}
+.btn:hover {
+  filter: brightness(1.08);
+}
+.btn:disabled {
+  opacity: 0.5;
+}
+
+.btn-ghost {
+  border: 1px solid var(--color-line);
+  background: transparent;
+  color: var(--color-ink);
+  border-radius: 12px;
+  padding: 0.7rem 1rem;
+}
+
+.seg {
+  border: 1px solid var(--color-line);
+  border-radius: 12px;
+  padding: 0.7rem;
+  color: var(--color-mute);
+  background: transparent;
+}
+
+.link-danger {
+  color: var(--color-rose);
+  font-size: 0.75rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 2px;
 }

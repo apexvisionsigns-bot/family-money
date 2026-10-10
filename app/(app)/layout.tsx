@@ -5,7 +5,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <AuthProvider>
       <Nav />
-      <main className="max-w-3xl mx-auto p-4 pb-24">{children}</main>
+      <main className="max-w-3xl mx-auto px-4 pt-4 pb-28">{children}</main>
     </AuthProvider>
   )
 }

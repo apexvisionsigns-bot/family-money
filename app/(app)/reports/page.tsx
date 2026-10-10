@@ -23,7 +23,13 @@ type Row = {
   categories: { name: string } | null
 }
 
-const COLORS = ['#0f766e', '#2563eb', '#d97706', '#dc2626', '#7c3aed', '#059669', '#db2777', '#65a30d', '#475569', '#ea580c']
+const COLORS = ['#f0b94a', '#52d3a8', '#6aa7ff', '#ff7b8b', '#b794f6', '#f6975a', '#4fd1e0', '#a3e635', '#94a3b8', '#f472b6']
+const TICK = { fill: '#8693b2', fontSize: 12 }
+const TIP = {
+  contentStyle: { background: '#1b2640', border: '1px solid #263250', borderRadius: 10, color: '#e9edf6' },
+  itemStyle: { color: '#e9edf6' },
+  labelStyle: { color: '#8693b2' },
+}
 
 function startOfWeek(d: Date) {
   const x = new Date(d)
@@ -109,61 +115,62 @@ export default function Reports() {
     return Array.from(m, ([name, v]) => ({ name, ...v }))
   }, [monthRows])
 
-  if (loading) return <p>Loading...</p>
+  if (loading) return <p className="text-mute">Loading...</p>
 
   return (
-    <div className="space-y-5">
-      <h1 className="text-lg font-semibold">Reports</h1>
+    <div className="space-y-6">
+      <h1 className="text-2xl font-semibold tracking-tight">Reports</h1>
 
       <div className="grid grid-cols-2 gap-2">
         {(['monthly', 'weekly'] as const).map((m) => (
           <button
             key={m}
             onClick={() => setMode(m)}
-            className={'rounded p-2 border ' + (mode === m ? 'bg-black text-white' : 'bg-white')}
+            className="seg"
+            style={mode === m ? { background: 'rgba(240,185,74,.14)', borderColor: 'var(--color-gold)', color: 'var(--color-gold)' } : undefined}
           >
             {m === 'monthly' ? 'Monthly' : 'Weekly'}
           </button>
         ))}
       </div>
 
-      <div className="bg-white border rounded-xl p-3">
-        <p className="text-sm font-medium mb-2">Income vs Expenses</p>
+      <div className="panel p-4">
+        <p className="font-medium mb-3">Income vs Expenses</p>
         <div style={{ width: '100%', height: 260 }}>
           <ResponsiveContainer>
             <BarChart data={bars}>
-              <XAxis dataKey="label" fontSize={12} />
-              <YAxis fontSize={12} width={50} />
-              <Tooltip formatter={(v) => money(Number(v))} />
-              <Legend />
-              <Bar dataKey="income" name="Income" fill="#16a34a" />
-              <Bar dataKey="expense" name="Expense" fill="#dc2626" />
+              <XAxis dataKey="label" tick={TICK} axisLine={{ stroke: '#263250' }} tickLine={false} />
+              <YAxis tick={TICK} width={48} axisLine={false} tickLine={false} />
+              <Tooltip formatter={(v) => money(Number(v))} cursor={{ fill: 'rgba(255,255,255,0.04)' }} {...TIP} />
+              <Legend wrapperStyle={{ color: '#8693b2', fontSize: 12 }} />
+              <Bar dataKey="income" name="Income" fill="#52d3a8" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="expense" name="Expense" fill="#ff7b8b" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
       </div>
 
-      <div className="bg-white border rounded-xl p-3">
-        <p className="text-sm font-medium mb-2">Where money went (this month)</p>
+      <div className="panel p-4">
+        <p className="font-medium mb-3">Where the money went this month</p>
         {byCategory.length === 0 ? (
-          <p className="text-sm text-gray-500">No expenses this month.</p>
+          <p className="text-sm text-mute">No spending recorded this month.</p>
         ) : (
           <>
             <div style={{ width: '100%', height: 220 }}>
               <ResponsiveContainer>
                 <PieChart>
-                  <Pie data={byCategory} dataKey="value" nameKey="name" outerRadius={90}>
+                  <Pie data={byCategory} dataKey="value" nameKey="name" innerRadius={55} outerRadius={90} stroke="#141c2e" strokeWidth={3}>
                     {byCategory.map((_, i) => (
                       <Cell key={i} fill={COLORS[i % COLORS.length]} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(v) => money(Number(v))} />
+                  <Tooltip formatter={(v) => money(Number(v))} {...TIP} />
                 </PieChart>
               </ResponsiveContainer>
             </div>
             <div className="space-y-1 mt-2">
               {byCategory.map((c, i) => (
-                <div key={c.name} className="flex justify-between text-sm">
+                <div key={c.name} className="flex justify-between text-sm num">
                   <span className="flex items-center gap-2">
                     <span
                       className="inline-block w-3 h-3 rounded-full"
@@ -179,15 +186,15 @@ export default function Reports() {
         )}
       </div>
 
-      <div className="bg-white border rounded-xl p-3">
-        <p className="text-sm font-medium mb-2">By bank account (this month)</p>
-        {byAccount.length === 0 && <p className="text-sm text-gray-500">Nothing yet.</p>}
+      <div className="panel p-4">
+        <p className="font-medium mb-3">By bank account this month</p>
+        {byAccount.length === 0 && <p className="text-sm text-mute">Nothing yet.</p>}
         {byAccount.map((a) => (
-          <div key={a.name} className="flex justify-between text-sm py-1 border-b last:border-0">
+          <div key={a.name} className="flex justify-between text-sm py-2 border-t border-line first:border-0 num">
             <span>{a.name}</span>
             <span>
-              <span className="text-green-700">+{money(a.income)}</span>{' '}
-              <span className="text-red-700">-{money(a.expense)}</span>
+              <span className="text-mint">+{money(a.income)}</span>{' '}
+              <span className="text-rose">-{money(a.expense)}</span>
             </span>
           </div>
         ))}
