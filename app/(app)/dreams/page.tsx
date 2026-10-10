@@ -139,7 +139,7 @@ export default function Dreams() {
           className="block w-full text-sm text-mute file:mr-3 file:rounded-lg file:border file:border-line file:bg-raised file:px-3 file:py-2 file:text-ink"
           onChange={(e) => setFile(e.target.files?.[0] ?? null)}
         />
-        {err && <p className="text-rose text-sm">{err}</p>}
+        {err && <p className="text-accent text-sm">{err}</p>}
         <button onClick={add} disabled={saving} className="btn">
           {saving ? 'Saving...' : 'Add dream'}
         </button>
@@ -159,13 +159,13 @@ export default function Dreams() {
               <div className="p-4 space-y-3">
                 <div className="flex justify-between">
                   <p className="text-lg font-medium leading-snug">{d.title}</p>
-                  {d.target_age && <p className="text-sm text-gold shrink-0 ml-3">By age {d.target_age}</p>}
+                  {d.target_age && <p className="text-sm text-accent shrink-0 ml-3">By age {d.target_age}</p>}
                 </div>
                 {d.note && <p className="text-sm text-mute">{d.note}</p>}
                 {d.target_amount ? (
                   <>
                     <div className="h-2 bg-raised rounded-full overflow-hidden">
-                      <div className="h-2 bg-gold rounded-full" style={{ width: `${pct}%` }} />
+                      <div className="h-2 bg-accent rounded-full" style={{ width: `${pct}%` }} />
                     </div>
                     <p className="text-xs text-mute num">
                       {money(d.saved_amount)} of {money(d.target_amount)} ({pct.toFixed(0)}%)
@@ -173,7 +173,7 @@ export default function Dreams() {
                   </>
                 ) : null}
                 <div className="flex gap-4 text-sm">
-                  <button onClick={() => addSaving(d)} className="text-gold underline underline-offset-4">
+                  <button onClick={() => addSaving(d)} className="text-accent underline underline-offset-4">
                     Add savings
                   </button>
                   {isAdmin && (

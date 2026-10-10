@@ -32,7 +32,7 @@ export default function Nav() {
     <>
       <header className="max-w-3xl mx-auto px-4 pt-5 pb-1 flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-gold" />
+          <span className="w-2.5 h-2.5 rounded-full bg-accent" />
           <span className="font-semibold tracking-tight">Family Money</span>
         </div>
         <div className="flex items-center gap-3">
@@ -56,7 +56,7 @@ export default function Nav() {
                 href={href}
                 className={
                   'flex flex-col items-center gap-0.5 px-3 py-1 text-[11px] ' +
-                  (active ? 'text-gold' : 'text-mute')
+                  (active ? 'text-accent' : 'text-mute')
                 }
               >
                 <Icon size={21} strokeWidth={active ? 2.3 : 1.8} />

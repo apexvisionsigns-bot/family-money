@@ -47,19 +47,19 @@ export default function Dashboard() {
           <div className="flex h-2 rounded-full overflow-hidden bg-raised">
             {flow > 0 && (
               <>
-                <div className="bg-mint" style={{ width: `${incPct}%` }} />
-                <div className="bg-rose" style={{ width: `${100 - incPct}%` }} />
+                <div className="bg-ash" style={{ width: `${incPct}%` }} />
+                <div className="bg-accent" style={{ width: `${100 - incPct}%` }} />
               </>
             )}
           </div>
           <div className="flex justify-between mt-3 text-sm">
             <div>
               <p className="text-mute">In this month</p>
-              <p className="num text-mint font-medium">{money(inc)}</p>
+              <p className="num text-ash font-medium">{money(inc)}</p>
             </div>
             <div className="text-right">
               <p className="text-mute">Out this month</p>
-              <p className="num text-rose font-medium">{money(exp)}</p>
+              <p className="num text-accent font-medium">{money(exp)}</p>
             </div>
           </div>
         </div>
@@ -70,7 +70,7 @@ export default function Dashboard() {
         {bals.length === 0 ? (
           <div className="panel p-4 text-sm text-mute">
             Nothing here yet.{' '}
-            <Link className="text-gold underline underline-offset-4" href="/accounts">
+            <Link className="text-accent underline underline-offset-4" href="/accounts">
               Add your first bank account
             </Link>
           </div>

@@ -107,7 +107,7 @@ export default function Transactions() {
                 setCategoryId('')
               }}
               className="seg"
-              style={kind === 'expense' ? { background: 'rgba(255,123,139,.14)', borderColor: 'var(--color-rose)', color: 'var(--color-rose)' } : undefined}
+              style={kind === 'expense' ? { background: 'rgba(225,29,46,.16)', borderColor: 'var(--color-accent)', color: 'var(--color-accent)' } : undefined}
             >
               Money out
             </button>
@@ -117,7 +117,7 @@ export default function Transactions() {
                 setCategoryId('')
               }}
               className="seg"
-              style={kind === 'income' ? { background: 'rgba(82,211,168,.14)', borderColor: 'var(--color-mint)', color: 'var(--color-mint)' } : undefined}
+              style={kind === 'income' ? { background: 'rgba(212,212,212,.12)', borderColor: 'var(--color-ash)', color: 'var(--color-ash)' } : undefined}
             >
               Money in
             </button>
@@ -153,7 +153,7 @@ export default function Transactions() {
             value={note}
             onChange={(e) => setNote(e.target.value)}
           />
-          {err && <p className="text-rose text-sm">{err}</p>}
+          {err && <p className="text-accent text-sm">{err}</p>}
           <button onClick={save} disabled={saving} className="btn w-full">
             {saving ? 'Saving...' : 'Save entry'}
           </button>
@@ -163,8 +163,8 @@ export default function Transactions() {
       <div className="flex items-center justify-between gap-3">
         <input type="month" className="field !w-auto" value={month} onChange={(e) => setMonth(e.target.value)} />
         <div className="text-right text-sm num">
-          <p className="text-mint">+{money(inc)}</p>
-          <p className="text-rose">-{money(exp)}</p>
+          <p className="text-ash">+{money(inc)}</p>
+          <p className="text-accent">-{money(exp)}</p>
         </div>
       </div>
 
@@ -184,7 +184,7 @@ export default function Transactions() {
                 </p>
               </div>
               <div className="text-right shrink-0">
-                <p className={'num font-medium ' + (t.kind === 'income' ? 'text-mint' : 'text-rose')}>
+                <p className={'num font-medium ' + (t.kind === 'income' ? 'text-ash' : 'text-accent')}>
                   {t.kind === 'income' ? '+' : '-'}
                   {money(t.amount)}
                 </p>

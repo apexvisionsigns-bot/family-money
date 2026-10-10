@@ -147,7 +147,7 @@ export default function Schedule() {
           <input type="time" className="field" value={start} onChange={(e) => setStart(e.target.value)} />
           <input type="time" className="field" value={end} onChange={(e) => setEnd(e.target.value)} />
         </div>
-        {err && <p className="text-rose text-sm">{err}</p>}
+        {err && <p className="text-accent text-sm">{err}</p>}
         <button onClick={add} className="btn">
           Add event
         </button>
@@ -180,7 +180,7 @@ export default function Schedule() {
           return (
             <div key={d.toISOString()} className="panel p-4 space-y-2">
               <p className="font-medium flex items-center gap-2">
-                {isToday && <span className="w-2 h-2 rounded-full bg-gold" />}
+                {isToday && <span className="w-2 h-2 rounded-full bg-accent" />}
                 {d.toLocaleDateString([], { weekday: 'long', month: 'short', day: 'numeric' })}
               </p>
               {dayEvents.map((e) => (
@@ -191,7 +191,7 @@ export default function Schedule() {
                     </span>
                     <br />
                     {e.title}
-                    <span className="text-gold"> {nameOf(e.owner)}</span>
+                    <span className="text-accent"> {nameOf(e.owner)}</span>
                   </span>
                   <button onClick={() => remove(e.id)} className="link-danger self-start">
                     remove
@@ -206,8 +206,8 @@ export default function Schedule() {
               {free.map((f, i) => (
                 <div
                   key={i}
-                  className="rounded-xl p-3 text-sm num text-mint"
-                  style={{ background: 'rgba(82,211,168,.12)', border: '1px solid rgba(82,211,168,.35)' }}
+                  className="rounded-xl p-3 text-sm num text-ash"
+                  style={{ background: 'rgba(212,212,212,.08)', border: '1px solid rgba(212,212,212,.30)' }}
                 >
                   Free {fmtTime(f.s)} - {fmtTime(f.e)}
                 </div>

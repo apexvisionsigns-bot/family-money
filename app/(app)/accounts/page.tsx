@@ -65,7 +65,7 @@ export default function Accounts() {
             value={opening}
             onChange={(e) => setOpening(e.target.value)}
           />
-          {err && <p className="text-rose text-sm">{err}</p>}
+          {err && <p className="text-accent text-sm">{err}</p>}
           <button onClick={add} className="btn">
             Add account
           </button>

@@ -23,12 +23,12 @@ type Row = {
   categories: { name: string } | null
 }
 
-const COLORS = ['#f0b94a', '#52d3a8', '#6aa7ff', '#ff7b8b', '#b794f6', '#f6975a', '#4fd1e0', '#a3e635', '#94a3b8', '#f472b6']
-const TICK = { fill: '#8693b2', fontSize: 12 }
+const COLORS = ['#e11d2e', '#d4d4d4', '#a31422', '#9a9a9a', '#ff5a66', '#6b6b6b', '#7d0f1a', '#bdbdbd', '#4a4a4a', '#ff8f98']
+const TICK = { fill: '#8a8a8a', fontSize: 12 }
 const TIP = {
-  contentStyle: { background: '#1b2640', border: '1px solid #263250', borderRadius: 10, color: '#e9edf6' },
-  itemStyle: { color: '#e9edf6' },
-  labelStyle: { color: '#8693b2' },
+  contentStyle: { background: '#1e1e1e', border: '1px solid #2c2c2c', borderRadius: 10, color: '#e4e4e4' },
+  itemStyle: { color: '#e4e4e4' },
+  labelStyle: { color: '#8a8a8a' },
 }
 
 function startOfWeek(d: Date) {
@@ -127,7 +127,7 @@ export default function Reports() {
             key={m}
             onClick={() => setMode(m)}
             className="seg"
-            style={mode === m ? { background: 'rgba(240,185,74,.14)', borderColor: 'var(--color-gold)', color: 'var(--color-gold)' } : undefined}
+            style={mode === m ? { background: 'rgba(225,29,46,.16)', borderColor: 'var(--color-accent)', color: 'var(--color-accent)' } : undefined}
           >
             {m === 'monthly' ? 'Monthly' : 'Weekly'}
           </button>
@@ -139,12 +139,12 @@ export default function Reports() {
         <div style={{ width: '100%', height: 260 }}>
           <ResponsiveContainer>
             <BarChart data={bars}>
-              <XAxis dataKey="label" tick={TICK} axisLine={{ stroke: '#263250' }} tickLine={false} />
+              <XAxis dataKey="label" tick={TICK} axisLine={{ stroke: '#2c2c2c' }} tickLine={false} />
               <YAxis tick={TICK} width={48} axisLine={false} tickLine={false} />
               <Tooltip formatter={(v) => money(Number(v))} cursor={{ fill: 'rgba(255,255,255,0.04)' }} {...TIP} />
-              <Legend wrapperStyle={{ color: '#8693b2', fontSize: 12 }} />
-              <Bar dataKey="income" name="Income" fill="#52d3a8" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="expense" name="Expense" fill="#ff7b8b" radius={[4, 4, 0, 0]} />
+              <Legend wrapperStyle={{ color: '#8a8a8a', fontSize: 12 }} />
+              <Bar dataKey="income" name="Income" fill="#d4d4d4" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="expense" name="Expense" fill="#e11d2e" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
@@ -159,7 +159,7 @@ export default function Reports() {
             <div style={{ width: '100%', height: 220 }}>
               <ResponsiveContainer>
                 <PieChart>
-                  <Pie data={byCategory} dataKey="value" nameKey="name" innerRadius={55} outerRadius={90} stroke="#141c2e" strokeWidth={3}>
+                  <Pie data={byCategory} dataKey="value" nameKey="name" innerRadius={55} outerRadius={90} stroke="#141414" strokeWidth={3}>
                     {byCategory.map((_, i) => (
                       <Cell key={i} fill={COLORS[i % COLORS.length]} />
                     ))}
@@ -193,8 +193,8 @@ export default function Reports() {
           <div key={a.name} className="flex justify-between text-sm py-2 border-t border-line first:border-0 num">
             <span>{a.name}</span>
             <span>
-              <span className="text-mint">+{money(a.income)}</span>{' '}
-              <span className="text-rose">-{money(a.expense)}</span>
+              <span className="text-ash">+{money(a.income)}</span>{' '}
+              <span className="text-accent">-{money(a.expense)}</span>
             </span>
           </div>
         ))}

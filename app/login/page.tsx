@@ -23,7 +23,7 @@ export default function Login() {
     <main className="min-h-screen flex items-center justify-center p-5">
       <div className="w-full max-w-sm space-y-6">
         <div>
-          <span className="inline-block w-3 h-3 rounded-full bg-gold mb-4" />
+          <span className="inline-block w-3 h-3 rounded-full bg-accent mb-4" />
           <h1 className="text-3xl font-semibold tracking-tight">Family Money</h1>
           <p className="text-mute mt-1">Sign in to see where the money stands.</p>
         </div>
@@ -43,7 +43,7 @@ export default function Login() {
             onChange={(e) => setPassword(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && signIn()}
           />
-          {error && <p className="text-rose text-sm">{error}</p>}
+          {error && <p className="text-accent text-sm">{error}</p>}
           <button onClick={signIn} disabled={loading} className="btn w-full">
             {loading ? 'Signing in...' : 'Sign in'}
           </button>
